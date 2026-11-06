@@ -1,38 +1,43 @@
-VMware-VM-Cloner
-================
+# VMware Scripts
 
-Clone multiple VMware virtual machines to a different Datastore as a backup
+PowerCLI / PowerShell utilities for day-to-day VMware admin work — backups via full VM clones, and managed snapshot rotation.
 
-### Installation
+## Scripts
 
-1. Clone this script from github or copy the files manually to your prefered directory.
+| Script | Folder | Purpose |
+|--------|--------|---------|
+| **VM Cloner** | [`vm-cloner/`](vm-cloner/) | Clone all VMs in a folder to another datastore (dated backup clones) |
+| **VM Snapshot Manager** | [`vm-snapshot-manager/`](vm-snapshot-manager/) | List snapshots (flag manual ones) or create/rotate managed snapshots |
 
-2. Edit the VM-Cloner.ps1 file and replace the following values:
+Each folder has its own README with config details.
 
-##### Your vCenter server and credentials: 
- - $vcenter = "vc.domain"
- - $username = "" - leave blank to use current user credentials
- - $password = ""
+## Requirements
 
-##### sourceLocation is a folder in your vcenter structure.
- - $sourceLocation = "Production"
+- [VMware PowerCLI](https://developer.broadcom.com/powercli)
+- Network access to your vCenter
+- An account that can perform the actions each script needs (clone VMs, create/remove snapshots)
 
-##### Target Datastore
- - $datastore = "ESX1"
+## Quick start
 
-##### Target location - existing folder in vcenter structure, where the clones will be stored
- - $targetlocation = "AutoBackup"
+1. Open the script folder you want to use.
+2. Edit the `.ps1` file — set `$vCenter`, folders, and other config at the top.
+3. Leave `$DebugMode = "True"` for a dry run, then set it to `"False"` to execute.
+4. Run from PowerCLI / PowerShell:
 
-##### Datacenter name
- - $datacenter = "DC1"
+```powershell
+cd .\vm-cloner
+.\vm-cloner.ps1
 
-##### Target Resource Pool
- - $targetResourcePool = "AutoBackup"
+cd .\vm-snapshot-manager
+.\vm-snapshot-manager.ps1
+```
 
-##### Target Host
- - $targethost = "" - hostname.domain or leave blank to use current VM host as target
+## Notes
 
+- Scripts are configured by editing variables in the `.ps1` files (no CLI args yet).
+- Each run appends to a dated log file in the working directory.
+- Snapshot Manager never removes manually created snapshots — only names matching its managed format.
 
-Author: [RaveMaker][RaveMaker].
+---
 
-[RaveMaker]: http://ravemaker.net
+Author: [RaveMaker](http://ravemaker.net)
